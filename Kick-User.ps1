@@ -14,7 +14,7 @@ $Credential = Get-Content $PasswordFile | ConvertTo-SecureString
 
 
 #Set the file properties to check
-$FileWitnessPath = "C:\Test1\*"
+$FileWitnessPath = "C:\Share\*"
 $FileWitness1 = "C:\Share\_Witness\Witness_do_not_edit.txt"
 $FileWitness2 = "C:\Share\ZWitness\Witness_do_not_edit.txt"
 $HashWitness = '6207702E2B0291F1E5A3ECF54B25EE294B23C14C3F8F58B00E520BD3598AF81'
@@ -38,7 +38,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
     #If no logs were found, send an email detailing the weirdness of it all
     If ($AuditLog -eq $Null) {
 
-        $EmailMessage += "Could not find the user or computer who modified the files. Please check to verify if there is something wrong. `n"
+        $EmailMessage += "Could not find the user or computer who modified the files. Please chec to verify if there is something wrong. `n"
         Send-MailMessage -To $To -From $From -Subject 'Warning: Possible CryptoLocker, no user found' -Body "$EmailMessage" -Port $Port -UseSsl -Credential $Credential
     }
     #Otherwise start getting serious about kicking people
