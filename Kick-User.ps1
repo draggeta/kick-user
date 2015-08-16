@@ -38,7 +38,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
     #If no logs were found, send an email detailing the weirdness of it all
     If ($AuditLog -eq $Null) {
 
-        $EmailMessage += "Could not find the user or computer who modified the files. Please chec to verify if there is something wrong. `n"
+        $EmailMessage += "Could not find the user or computer who modified the files. Please check to verify if there is something wrong. `n"
         Send-MailMessage -To $To -From $From -Subject 'Warning: Possible CryptoLocker, no user found' -Body "$EmailMessage" -Port $Port -UseSsl -Credential $Credential
     }
     #Otherwise start getting serious about kicking people
@@ -66,7 +66,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
 
                 $WorkstationIP = (net session | Select-String $Name).Line.Substring(2,21).Trim()
                 $WorkstationName = (Resolve-DnsName $WorkstationIP).NameHost
-                #$WorkstationName = (nslookup rds02 | Select-String 'name').Line.Substring(9).Trim()
+                #$WorkstationName = (nslookup $Name | Select-String 'name').Line.Substring(9).Trim()
 
                 Restart-Computer -ComputerName $WorkstationName -Force
                 $EmailMessage += "Their computer $WorkstationName on $WorkstationIP has been restarted to close all active sessions `n"
