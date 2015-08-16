@@ -11,7 +11,7 @@ $Username = 'relay@domain.com'
 $Password = 'C:\Scripts\PwdRelay.txt'
 #$SecPassword = $Password | ConvertTo-SecureString -AsPlainText -Force 
 $SecPassword = Get-Content $Password | ConvertTo-SecureString
-$Credential = New-Object System.Management.Automation.PSCredential ($Username,$SecurePassword)  
+$Credential = New-Object System.Management.Automation.PSCredential ($Username,$SecPassword)  
 
 
 #Set the file properties to check
