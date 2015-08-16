@@ -8,9 +8,10 @@ $Port = '587'
 $PSEmailServer = 'mail.domain.com'
 $Username = 'relay@domain.com'
 #$Password = 'P@$$w0rd!'
-$PasswordFile = 'C:\Scripts\PwdRelay.txt'
-#$Credential = $Password | ConvertTo-SecureString -AsPlainText -Force 
-$Credential = Get-Content $PasswordFile | ConvertTo-SecureString  
+$Password = 'C:\Scripts\PwdRelay.txt'
+#$SecPassword = $Password | ConvertTo-SecureString -AsPlainText -Force 
+$SecPassword = Get-Content $Password | ConvertTo-SecureString
+$Credential = New-Object System.Management.Automation.PSCredential ($Username,$SecurePassword)  
 
 
 #Set the file properties to check
