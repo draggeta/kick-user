@@ -25,7 +25,7 @@ $HashWitness = '6207702E2B0291F1E5A3ECF54B25EE294B23C14C3F8F58B00E520BD3598AF81'
 Try {$CurrentHash1 = Get-FileHash $FileWitness1}
 Catch { $EmailMessage += "$FileWitness1 has been renamed or deleted."}
 Try {$CurrentHash2 = Get-FileHash $FileWitness2}
-Catch { $EmailMessage += "$FileWitness1 has been renamed or deleted."}
+Catch { $EmailMessage += "$FileWitness2 has been renamed or deleted."}
 
 
 #Check if the hashes match the reference hash, if they don't start to freak out
