@@ -15,8 +15,8 @@ $Credential = Get-Content $PasswordFile | ConvertTo-SecureString
 
 #Set the file properties to check
 $FileWitnessPath = "C:\Share\*"
-$FileWitness1 = "C:\Share\_Witness\Witness_do_not_edit.txt"
-$FileWitness2 = "C:\Share\ZWitness\Witness_do_not_edit.txt"
+$FileWitness1 = "C:\Share\_Witness\Witness_do_not_edit.docx"
+$FileWitness2 = "C:\Share\ZWitness\Witness_do_not_edit.docx"
 $HashWitness = '6207702E2B0291F1E5A3ECF54B25EE294B23C14C3F8F58B00E520BD3598AF81'
 
 
@@ -66,7 +66,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
 
                 $WorkstationIP = (net session | Select-String $Name).Line.Substring(2,21).Trim()
                 $WorkstationName = (Resolve-DnsName $WorkstationIP).NameHost
-                #$WorkstationName = (nslookup $Name | Select-String 'name').Line.Substring(9).Trim()
+                #$WorkstationName = (nslookup $WorkstationIP | Select-String 'name').Line.Substring(9).Trim()
 
                 Restart-Computer -ComputerName $WorkstationName -Force
                 $EmailMessage += "Their computer $WorkstationName on $WorkstationIP has been restarted to close all active sessions `n"
