@@ -21,7 +21,7 @@ $FileWitness2 = "C:\Share\ZWitness\Witness_do_not_edit.docx"
 $HashWitness = '6207702E2B0291F1E5A3ECF54B25EE294B23C14C3F8F58B00E520BD3598AF81'
 
 
-#Calculate the hashes of the files as they currently are and if incorrect/absent, start to feel uneasy
+#Calculate the hashes of the files as they currently are and if incorrect/absent, start to sweat
 Try {$CurrentHash1 = Get-FileHash $FileWitness1}
 Catch { $EmailMessage += "$FileWitness1 has been renamed or deleted."}
 Try {$CurrentHash2 = Get-FileHash $FileWitness2}
@@ -40,7 +40,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
     If ($AuditLog -eq $Null) {
 
         $EmailMessage += "Could not find the user or computer who modified the files. Please check to verify if there is something wrong. `n"
-        Send-MailMessage -To $To -From $From -Subject 'Warning: Possible CryptoLocker, no user found' -Body "$EmailMessage" -Port $Port -UseSsl -Credential $Credential
+        
     }
     #Otherwise start getting serious about kicking people
     Else {
@@ -62,7 +62,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
                 $EmailMessage += "Could not find user $Name, or something went wrong trying to disable their account."
 
             }
-            #Try restarting/halting their computer, release it's IP or whatever else you fancy
+            #Try restarting/halting their computer, release its IP or whatever else you fancy
             Try {
 
                 $WorkstationIP = (net session | Select-String $Name).Line.Substring(2,21).Trim()
@@ -80,10 +80,11 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
             }
 
         }
-        #Send an email detailing the hard work you performed (or tried to)
-        Send-MailMessage -To $To -From $From -Subject 'Warning: Possible CryptoLocker' -Body "$EmailMessage" -Port $Port -UseSsl -Credential $Credential
-
+        
     }
+
+    #Send an email detailing the hard work you performed (or tried to)
+    Send-MailMessage -To $To -From $From -Subject 'Warning: Possible CryptoLocker' -Body "$EmailMessage" -Port $Port -UseSsl -Credential $Credential
 
 }
 
