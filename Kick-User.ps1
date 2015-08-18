@@ -2,7 +2,7 @@
 .SYNOPSIS
     Activates when an audited file gets edited and disables the user's account and computer
 .DESCRIPTION
-    The Kick-User.ps1 script gets activated by a file audit event. It compares the known hash of a file with the current hash after activation. 
+    The Kick-User.ps1 script gets activated by a file audit event. This means that you need to attach a task to the specific events you want it to trigger on. It compares the known hash of a file with the current hash after activation. 
     If the hashes don't match, the user will be extracted from the logs and the computername from the active sessions. Lastly, the user account will be activated and the workstation will be restarted/shutdown or whatever you want.
     
     Due to the way the workstation is detected, you need to run this script on the server you are auditing. If you want to forward the events to a central server, you may need to use PowerShell remoting to query the sessions.
