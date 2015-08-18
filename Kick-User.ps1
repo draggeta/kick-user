@@ -13,12 +13,12 @@
      - Resolve-DNSName cmdlet works only on Windows Server 2012 and newer. If this script is run on an older OS, use the nslookup command. 
      
     Editable variables:
-     - To:          The email address to send the emails to
-     - From:        The email address to send the emails from, can be the same as above
-     - Username:    Not needed if using an anonymous relay. The username that is allowed to send emails as the from address. Can be the same user or a user with 'send as' rights.
-     - Password:    Not needed if using an anonymous relay. The password that goes with the username. Can be embedded, or used with a hashed password stored as a file
-     - SecPassword: Not needed if using an anonymous relay. The password variable as a secure string.
-     - Credential:  Not needed if using an anonymous relay. The combined object of the username and password variable.
+     - To:              The email address to send the emails to
+     - From:            The email address to send the emails from, can be the same as above
+     - Username:        Not needed if using an anonymous relay. The username that is allowed to send emails as the from address. Can be the same user or a user with 'send as' rights.
+     - Password:        Not needed if using an anonymous relay. The password that goes with the username. Can be embedded, or used with a hashed password stored as a file
+     - SecPassword:     Not needed if using an anonymous relay. The password variable as a secure string.
+     - Credential:      Not needed if using an anonymous relay. The combined object of the username and password variable.
 
      - FileWitnessPath: The biggest common part of the two file witnesses.
      - FileWitnessX:    The files that will be monitored.
@@ -90,7 +90,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
             Try {
 
                 Get-ADUser $Name | Disable-ADAccount
-                $EmailMessage += "User $Name's account has been disabled as they tried to modify the `"$Folder`" folder/directory."
+                $EmailMessage += "User $Name's account has been disabled as they tried to modify the `"$Folder`" folder/file."
 
             }
             Catch {
