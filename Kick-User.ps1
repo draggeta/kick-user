@@ -9,6 +9,7 @@
     
     Regarding the script:
      - ReplacementStrings are the values you can pull from the Event Viewer. 1 is the username, 6 is the folder.
+     - InstanceID's 4659 is delete, ID 4663 is modify. Change these to suit your environment if needed.
      - Resolve-DNSName cmdlet works only on Windows Server 2012 and newer. If this script is run on an older OS, use the nslookup command. 
      
     Editable variables:
@@ -16,23 +17,23 @@
      - From:        The email address to send the emails from, can be the same as above
      - Username:    Not needed if using an anonymous relay. The username that is allowed to send emails as the from address. Can be the same user or a user with 'send as' rights.
      - Password:    Not needed if using an anonymous relay. The password that goes with the username. Can be embedded, or used with a hashed password stored as a file
-     - SecPassword:	Not needed if using an anonymous relay. The password variable as a secure string.
+     - SecPassword: Not needed if using an anonymous relay. The password variable as a secure string.
      - Credential:  Not needed if using an anonymous relay. The combined object of the username and password variable.
 
      - FileWitnessPath: The biggest common part of the two file witnesses.
      - FileWitnessX:    The files that will be monitored.
      - Hashwitness:     The hash of the witness file(s). This can be calculated with the Get-FileHash command.
 .INPUTS
-	None. You cannot pipe objects to Kick-User.ps1
+    None. You cannot pipe objects to Kick-User.ps1
 .OUTPUTS
-	None. Kick-User only outputs to an email
+    None. Kick-User only outputs to an email
 .NOTES
     Author:   Tony Fortes Ramos
     Created:  August 11, 2015
     Modified: August 18, 2015
 .LINK
-	Send-MailMessage
-	Get-FileHash
+    Send-MailMessage
+    Get-FileHash
     Get-EventLog
 #>
 
