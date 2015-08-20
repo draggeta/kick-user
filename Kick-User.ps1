@@ -10,7 +10,7 @@
     Regarding the script:
      - ReplacementStrings are the values you can pull from the Event Viewer. 1 is the username, 6 is the folder.
      - InstanceID's 4659 is delete, ID 4663 is modify. Change these to suit your environment if needed.
-     - Resolve-DNSName cmdlet works only on Windows Server 2012 and newer. If this script is run on an older OS, use the nslookup command. 
+     - The DNS and SMB cmdlets work only on Windows Server 2012/Windows 8 and newer. If this script is run on an older OS, use the net session and nslookup commands. 
      
     Editable variables:
      - To:              The email address to send the emails to
@@ -68,7 +68,7 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
     #Get the logs that were created recently and match the $FileWitnessPath
     $AuditLog = Get-EventLog -LogName Security -InstanceId 4659,4663 -After (Get-Date).AddMinutes(-2) | 
     Where-Object { ($_.ReplacementStrings[6] -like $FileWitness1) -or ($_.ReplacementStrings[6] -like $FileWitness2) } | 
-    Select-Object @{ Name='Name';Expression={$_.ReplacementStrings[1]} }, @{ Name='Folder';Expression={$_.ReplacementStrings[6]} } -Unique
+    Select-Object @{ Name='Name';Expression={ $_.ReplacementStrings[1] } }, @{ Name='Folder';Expression={ $_.ReplacementStrings[6] } } -Unique
 
     
     #If no logs were found, send an email detailing the weirdness of it all
@@ -101,12 +101,15 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
             #Try restarting/halting their computer, release its IP or whatever else you fancy
             Try {
 
-                $WorkstationIP = (net session | Select-String $Name).Line.Substring(2,21).Trim()
+                $WorkstationIP = (Get-SmbSession | Where-Object { $_.ClientUserName -like "*$Name" }).ClientComputerName
+                #$WorkstationIP = (net session | Select-String $Name).Line.Substring(2,21).Trim()
                 $WorkstationName = (Resolve-DnsName $WorkstationIP).NameHost
                 #$WorkstationName = (nslookup $WorkstationIP | Select-String 'name').Line.Substring(9).Trim()
 
-                Restart-Computer -ComputerName $WorkstationName -Force
-                $EmailMessage += "Their computer $WorkstationName on $WorkstationIP has been restarted to close all active sessions `n"
+                #net session \\$WorkstationIP /delete
+                Close-SmbSession -ClientComputerName $WorkstationIP -Force
+                Stop-Computer -ComputerName $WorkstationName -Force
+                $EmailMessage += "Their computer $WorkstationName on $WorkstationIP has been shut down to close all active sessions `n"
 
             }
             Catch {
