@@ -20,7 +20,6 @@
      - SecPassword:     Not needed if using an anonymous relay. The password variable as a secure string.
      - Credential:      Not needed if using an anonymous relay. The combined object of the username and password variable.
 
-     - FileWitnessPath: The biggest common part of the two file witnesses.
      - FileWitnessX:    The files that will be monitored.
      - Hashwitness:     The hash of the witness file(s). This can be calculated with the Get-FileHash command.
 .INPUTS
@@ -53,10 +52,9 @@ $SecPassword = Get-Content $Password | ConvertTo-SecureString
 $Credential = New-Object System.Management.Automation.PSCredential ($Username,$SecPassword)  
 
 #Set the file properties to check
-$FileWitnessPath = "C:\Share\*"
 $FileWitness1 = "C:\Share\_Witness\Witness_do_not_edit.docx"
 $FileWitness2 = "C:\Share\ZWitness\Witness_do_not_edit.docx"
-$HashWitness = '6207702E2B0291F1E5A3ECF54B25EE294B23C14C3F8F58B00E520BD3598AF81'
+$HashWitness = '59748E9A9A4DAB08C2AADD1CF28C3C4A7B06FAF4A81D1468F48FE97D310F2765'
 
 #Calculate the hashes of the files as they currently are and if incorrect/absent, start to sweat
 Try { $CurrentHash1 = Get-FileHash $FileWitness1 }
@@ -69,8 +67,9 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
 
     #Get the logs that were created recently and match the $FileWitnessPath
     $AuditLog = Get-EventLog -LogName Security -InstanceId 4659,4663 -After (Get-Date).AddMinutes(-2) | 
-    Where-Object { $_.ReplacementStrings[6] -like $FileWitnessPath } | 
+    Where-Object { ($_.ReplacementStrings[6] -like $FileWitness1) -or ($_.ReplacementStrings[6] -like $FileWitness2) } | 
     Select-Object @{ Name='Name';Expression={$_.ReplacementStrings[1]} }, @{ Name='Folder';Expression={$_.ReplacementStrings[6]} } -Unique
+
     
     #If no logs were found, send an email detailing the weirdness of it all
     If ($AuditLog -eq $Null) {
@@ -90,12 +89,12 @@ If ($HashWitness -ne $CurrentHash1 -or $HashWitness -ne $CurrentHash2) {
             Try {
 
                 Get-ADUser $Name | Disable-ADAccount
-                $EmailMessage += "User $Name's account has been disabled as they tried to modify the `"$Folder`" folder/file."
+                $EmailMessage += "User $Name's account has been disabled as they tried to modify the `"$Folder`" folder/file. `n"
 
             }
             Catch {
 
-                $EmailMessage += "Could not find user $Name, or something went wrong trying to disable their account."
+                $EmailMessage += "Could not find user $Name, or something went wrong trying to disable their account. `n"
 
             }
 
